@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.github.pszalanski.intellijbitbucketpipelines</id>
-    <name>intellij-bitbucket-pipelines</name>
+    <name>Bitbucket Pipelines</name>
     <vendor>pszalanski</vendor>
 
     <!-- Product and plugin compatibility requirements -->
@@ -10,6 +10,9 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.pszalanski.intellijbitbucketpipelines.services.MyApplicationService"/>
         <projectService serviceImplementation="com.github.pszalanski.intellijbitbucketpipelines.services.MyProjectService"/>
+        <toolWindow id="Pipelines"
+                    anchor="bottom"
+                    factoryClass="com.github.pszalanski.intellijbitbucketpipelines.PipelinesToolWindowFactory"/>
     </extensions>
 
     <projectListeners>
