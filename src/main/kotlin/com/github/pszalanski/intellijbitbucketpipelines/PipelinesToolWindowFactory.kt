@@ -1,5 +1,7 @@
 package com.github.pszalanski.intellijbitbucketpipelines
 
+import com.github.pszalanski.intellijbitbucketpipelines.services.PipelineService
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
@@ -12,20 +14,37 @@ import javax.swing.JPanel
 class PipelinesToolWindow {
 
     val content: JPanel
-    private var text: String = ""
-    private var text2: String = ""
 
     init {
-        content = panel {
-            row {
-                // These two components will occupy two columns in the grid
-                label("Test")
-                textField({ text }, { v -> text = v})
+        val pipelinesService = service<PipelineService>()
 
-                // These two components will be placed in the same grid cell
-                cell {
-                    label("Another")
-                    textField({ text2 }, { v -> text2 = v})
+        if (pipelinesService.canLoginToBitbucket()) {
+            val pipelines = pipelinesService.getPipelinePage();
+            content = panel {
+                row {
+                    scrollPane(com.intellij.ui.layout.panel {
+                        for (pipelineRun in pipelines.values) {
+                            row {
+                                label("#" + pipelineRun.build_number)
+                                label("Status: " + pipelineRun.state.name)
+                                val result = pipelineRun.state.result
+                                if (result != null) {
+                                    label("Result: ${result.name}")
+                                }
+
+                                val stage = pipelineRun.state.stage
+                                if (stage != null) {
+                                    label("Stage: ${stage.name}")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        } else {
+            content = panel {
+                row {
+                    label("Could not login to bitbucket!")
                 }
             }
         }

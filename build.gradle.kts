@@ -39,6 +39,8 @@ repositories {
 }
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.11.0")
+    implementation("khttp:khttp:1.0.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.2")
 }
 
 // Configure gradle-intellij-plugin plugin.

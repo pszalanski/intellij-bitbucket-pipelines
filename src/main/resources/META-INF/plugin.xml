@@ -8,15 +8,24 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.pszalanski.intellijbitbucketpipelines.services.MyApplicationService"/>
+        <applicationService serviceImplementation="com.github.pszalanski.intellijbitbucketpipelines.settings.AppSettingsState"/>
         <projectService serviceImplementation="com.github.pszalanski.intellijbitbucketpipelines.services.MyProjectService"/>
         <toolWindow id="Pipelines"
                     anchor="bottom"
                     factoryClass="com.github.pszalanski.intellijbitbucketpipelines.PipelinesToolWindowFactory"/>
+        <applicationConfigurable parentId="tools"
+                                 instance="com.github.pszalanski.intellijbitbucketpipelines.settings.ApplicationSettingsConfigurable"
+                                 id="org.company.ApplicationSettingsConfigurable"
+                                 displayName="My Application Settings"/>
     </extensions>
 
     <projectListeners>
         <listener class="com.github.pszalanski.intellijbitbucketpipelines.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </projectListeners>
+    <actions>
+        <action id="com.github.pszalanski.intellijbitbucketpipelines.actions.Refresh"
+                class="com.github.pszalanski.intellijbitbucketpipelines.actions.Refresh"
+                text="Refresh Pipelines Action"/>
+    </actions>
 </idea-plugin>
