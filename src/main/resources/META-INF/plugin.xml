@@ -23,9 +23,4 @@
         <listener class="com.github.pszalanski.intellijbitbucketpipelines.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </projectListeners>
-    <actions>
-        <action id="com.github.pszalanski.intellijbitbucketpipelines.actions.Refresh"
-                class="com.github.pszalanski.intellijbitbucketpipelines.actions.Refresh"
-                text="Refresh Pipelines Action"/>
-    </actions>
 </idea-plugin>

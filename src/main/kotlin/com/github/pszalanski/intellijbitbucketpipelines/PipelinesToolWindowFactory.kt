@@ -8,7 +8,9 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.Content
 import com.intellij.ui.content.ContentFactory
 import com.intellij.ui.layout.panel
+import com.intellij.ui.treeStructure.Tree
 import javax.swing.JPanel
+import javax.swing.tree.DefaultMutableTreeNode
 
 
 class PipelinesToolWindow {
@@ -19,26 +21,15 @@ class PipelinesToolWindow {
         val pipelinesService = service<PipelineService>()
 
         if (pipelinesService.canLoginToBitbucket()) {
-            val pipelines = pipelinesService.getPipelinePage();
+            val root = DefaultMutableTreeNode("Pipeline runs")
+            for (run in pipelinesService.getPipelinePage().values) {
+                val runSummary = "#${run.build_number} - ${pipelinesService.getCommitMessage(run.target.commit.hash)}"
+                root.add(DefaultMutableTreeNode(runSummary))
+            }
+
             content = panel {
                 row {
-                    scrollPane(com.intellij.ui.layout.panel {
-                        for (pipelineRun in pipelines.values) {
-                            row {
-                                label("#" + pipelineRun.build_number)
-                                label("Status: " + pipelineRun.state.name)
-                                val result = pipelineRun.state.result
-                                if (result != null) {
-                                    label("Result: ${result.name}")
-                                }
-
-                                val stage = pipelineRun.state.stage
-                                if (stage != null) {
-                                    label("Stage: ${stage.name}")
-                                }
-                            }
-                        }
-                    })
+                    scrollPane(Tree(root))
                 }
             }
         } else {
